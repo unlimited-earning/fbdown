@@ -20,18 +20,6 @@
                 extend: {
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#eef2ff',
-                            100: '#e0e7ff',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                            900: '#312e81',
-                        },
-                        darkbg: '#0A0D14',
-                        cardbg: 'rgba(18, 24, 38, 0.7)',
                     }
                 }
             }
@@ -46,9 +34,8 @@
             overflow-x: hidden;
         }
 
-        /* Glassmorphism Classes */
         .glass-card {
-            background: rgba(17, 24, 39, 0.65);
+            background: rgba(17, 24, 39, 0.75);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -56,7 +43,7 @@
         }
 
         .glass-input {
-            background: rgba(10, 13, 20, 0.8);
+            background: rgba(10, 13, 20, 0.85);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.12);
         }
@@ -66,7 +53,6 @@
             box-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
         }
 
-        /* Gradient Text */
         .gradient-text {
             background: linear-gradient(135deg, #60A5FA 0%, #A78BFA 50%, #F472B6 100%);
             -webkit-background-clip: text;
@@ -77,7 +63,6 @@
             background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #DB2777 100%);
         }
 
-        /* Ambient Glow Background */
         .glow-sphere {
             position: absolute;
             border-radius: 50%;
@@ -86,7 +71,14 @@
             opacity: 0.35;
         }
 
-        /* Custom Scrollbar */
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.35; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+        .pulse-glow {
+            animation: pulseGlow 4s infinite ease-in-out;
+        }
+
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -97,32 +89,20 @@
             background: #1F2937;
             border-radius: 4px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #374151;
-        }
-
-        /* Pulse Animation for Loader */
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 0.4; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.05); }
-        }
-        .pulse-glow {
-            animation: pulseGlow 4s infinite ease-in-out;
-        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between relative selection:bg-brand-500 selection:text-white">
+<body class="min-h-screen flex flex-col justify-between relative selection:bg-indigo-500 selection:text-white">
 
-    <!-- Ambient Gradient Background Elements -->
+    <!-- Ambient Glow BG -->
     <div class="glow-sphere w-[500px] h-[500px] bg-blue-600 top-[-100px] left-[-100px] pulse-glow"></div>
     <div class="glow-sphere w-[600px] h-[600px] bg-purple-600 bottom-[-150px] right-[-150px] pulse-glow" style="animation-delay: 2s;"></div>
 
-    <!-- Navigation Header -->
-    <header class="w-full border-b border-white/5 backdrop-blur-md sticky top-0 z-50 bg-[#0A0D14]/80">
+    <!-- Top Header Navigation -->
+    <header class="w-full border-b border-white/5 backdrop-blur-md sticky top-0 z-40 bg-[#0A0D14]/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center shadow-lg shadow-indigo-500/30">
-                    <i class="fa-brands font-bold text-white text-xl">f</i>
+                    <i class="fa-brands fa-facebook-f font-bold text-white text-xl"></i>
                 </div>
                 <span class="text-2xl font-extrabold tracking-tight text-white">FB<span class="gradient-text">Streamer</span></span>
             </div>
@@ -135,43 +115,43 @@
         </div>
     </header>
 
-    <!-- Main Container -->
+    <!-- Main Content Area -->
     <main class="flex-grow max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col justify-center">
 
-        <!-- Hero Section -->
+        <!-- Hero Banner -->
         <div class="text-center mb-10">
             <h1 class="text-4xl sm:text-6xl font-black tracking-tight mb-4 text-white leading-tight">
                 Download Facebook Videos <br class="hidden sm:inline">
                 <span class="gradient-text">In Ultra HD Quality</span>
             </h1>
-            <p class="text-gray-400 text-lg max-w-2xl mx-auto">
-                Fast, free, and private downloader for Facebook Reels, Videos, and Audio tracks. High speed extraction with zero ads.
+            <p class="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto">
+                Fast, free, and private downloader for Facebook Reels, Videos, Share Links, and Audio tracks.
             </p>
         </div>
 
-        <!-- Downloader Glass Card -->
-        <div class="glass-card rounded-3xl p-4 sm:p-8 transition-all duration-300">
-            <!-- Input Form Group -->
+        <!-- Glass Card Box -->
+        <div class="glass-card rounded-3xl p-4 sm:p-8 transition-all duration-300 relative z-10">
+            <!-- Form Input -->
             <form id="downloadForm" class="space-y-4" onsubmit="event.preventDefault(); fetchVideo();">
                 <div class="glass-input rounded-2xl p-2 flex flex-col sm:flex-row items-center gap-2 transition-all">
                     
-                    <div class="flex items-center pl-4 w-full sm:w-auto text-gray-400">
+                    <div class="flex items-center pl-4 w-full sm:w-auto text-gray-400 hidden sm:flex">
                         <i class="fa-solid fa-link text-lg"></i>
                     </div>
 
                     <input 
                         type="url" 
                         id="videoUrl" 
-                        placeholder="Paste Facebook video or reel URL here..." 
+                        placeholder="Paste Facebook video, reel or share URL here..." 
                         required
-                        class="w-full bg-transparent border-none text-white placeholder-gray-500 text-base focus:ring-0 focus:outline-none px-2 py-3"
+                        class="w-full bg-transparent border-none text-white placeholder-gray-500 text-sm sm:text-base focus:ring-0 focus:outline-none px-3 py-3"
                     >
 
                     <div class="flex items-center gap-2 w-full sm:w-auto justify-end pr-1">
                         <button 
                             type="button" 
                             onclick="pasteClipboard()" 
-                            class="px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-xs font-semibold flex items-center gap-2 transition"
+                            class="px-3.5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-xs font-semibold flex items-center gap-2 transition"
                             title="Paste Link"
                         >
                             <i class="fa-regular fa-clipboard"></i>
@@ -209,33 +189,32 @@
                 </div>
                 <div class="text-center">
                     <p class="text-white font-semibold text-lg">Analyzing Video URL...</p>
-                    <p class="text-gray-400 text-sm">Parsing formats and quality options from Facebook</p>
+                    <p class="text-gray-400 text-sm">Resolving redirects and fetching qualities</p>
                 </div>
-                <!-- Progress Bar Bar -->
                 <div class="w-64 h-1.5 bg-gray-800 rounded-full overflow-hidden mt-2">
                     <div class="h-full bg-gradient-to-r from-indigo-500 to-pink-500 animate-pulse w-full"></div>
                 </div>
             </div>
 
-            <!-- Error Notification Banner -->
+            <!-- Error Banner -->
             <div id="errorBanner" class="hidden mt-6 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-300 flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-circle-exclamation text-xl text-rose-400"></i>
-                    <span id="errorMessage" class="text-sm font-medium">An error occurred while fetching the video.</span>
+                    <i class="fa-solid fa-circle-exclamation text-xl text-rose-400 shrink-0"></i>
+                    <span id="errorMessage" class="text-sm font-medium leading-normal">An error occurred while fetching the video.</span>
                 </div>
-                <button onclick="hideError()" class="text-rose-400 hover:text-rose-200">
+                <button onclick="hideError()" class="text-rose-400 hover:text-rose-200 pl-2">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <!-- Video Preview & Downloads Result Card -->
+            <!-- Result Card -->
             <div id="resultCard" class="hidden mt-8 pt-8 border-t border-white/10 transition-all duration-500">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                     
-                    <!-- Thumbnail Box -->
+                    <!-- Thumbnail Column -->
                     <div class="lg:col-span-5 space-y-3">
                         <div class="relative rounded-2xl overflow-hidden border border-white/10 group bg-black/40 shadow-xl">
-                            <img id="videoThumbnail" src="" alt="Video Thumbnail" class="w-full h-56 object-cover transform group-hover:scale-105 transition duration-500">
+                            <img id="videoThumbnail" src="" alt="Thumbnail" class="w-full h-56 object-cover transform group-hover:scale-105 transition duration-500">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                             <span id="videoDuration" class="absolute bottom-3 right-3 px-2.5 py-1 rounded-md bg-black/80 text-white text-xs font-mono font-bold tracking-wider backdrop-blur-md">
                                 00:00
@@ -249,27 +228,27 @@
                         </p>
                     </div>
 
-                    <!-- Available Qualities List -->
+                    <!-- Downloads Column -->
                     <div class="lg:col-span-7 space-y-4">
                         <h4 class="text-sm font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
                             <i class="fa-solid fa-download text-indigo-400"></i>
-                            Select Quality to Download
+                            Select Download Format
                         </h4>
 
                         <div id="qualitiesList" class="space-y-2.5 max-h-[300px] overflow-y-auto pr-1">
-                            <!-- Dynamic Format Row Cards will be injected here -->
+                            <!-- Dynamic rows injected here -->
                         </div>
 
-                        <!-- Secondary Action Buttons -->
+                        <!-- Action Buttons -->
                         <div class="pt-4 border-t border-white/10 flex flex-wrap gap-2">
                             <button onclick="copyOriginalLink()" class="flex-1 min-w-[140px] px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-xs font-semibold flex items-center justify-center gap-2 transition">
                                 <i class="fa-regular fa-copy"></i>
-                                Copy Video URL
+                                Copy Link
                             </button>
 
                             <button onclick="shareVideo()" class="flex-1 min-w-[140px] px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-xs font-semibold flex items-center justify-center gap-2 transition">
                                 <i class="fa-solid fa-share-nodes"></i>
-                                Share Video
+                                Share
                             </button>
 
                             <button onclick="resetFetcher()" class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-xs font-semibold flex items-center justify-center gap-2 transition">
@@ -283,15 +262,15 @@
 
         </div>
 
-        <!-- Features / Info Badges -->
+        <!-- Feature Highlights -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
             <div class="p-5 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center gap-4">
                 <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl">
                     <i class="fa-solid fa-bolt"></i>
                 </div>
                 <div>
-                    <h5 class="text-white font-bold text-sm">Ultra Fast Speed</h5>
-                    <p class="text-gray-400 text-xs mt-0.5">Instant server extraction</p>
+                    <h5 class="text-white font-bold text-sm">Ultra Fast</h5>
+                    <p class="text-gray-400 text-xs mt-0.5">Instant link extraction</p>
                 </div>
             </div>
 
@@ -300,8 +279,8 @@
                     <i class="fa-solid fa-film"></i>
                 </div>
                 <div>
-                    <h5 class="text-white font-bold text-sm">Full HD Support</h5>
-                    <p class="text-gray-400 text-xs mt-0.5">1080p, 720p, 480p & Audio</p>
+                    <h5 class="text-white font-bold text-sm">All Qualities</h5>
+                    <p class="text-gray-400 text-xs mt-0.5">1080p, 720p, 480p & MP3</p>
                 </div>
             </div>
 
@@ -310,8 +289,8 @@
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
                 <div>
-                    <h5 class="text-white font-bold text-sm">100% Safe & Secure</h5>
-                    <p class="text-gray-400 text-xs mt-0.5">No login or tracking required</p>
+                    <h5 class="text-white font-bold text-sm">100% Private</h5>
+                    <p class="text-gray-400 text-xs mt-0.5">No login or personal data stored</p>
                 </div>
             </div>
         </div>
@@ -322,28 +301,24 @@
     <footer class="w-full border-t border-white/5 py-8 text-center text-gray-500 text-xs mt-12">
         <div class="max-w-7xl mx-auto px-4 space-y-2">
             <p>© 2025 FBStreamer Downloader. All rights reserved.</p>
-            <p class="text-gray-600">This service is for educational and personal use only. We are not affiliated with Facebook or Meta.</p>
+            <p class="text-gray-600">Educational tool. Not affiliated with Meta or Facebook.</p>
         </div>
     </footer>
 
-    <!-- Toast Notification Box -->
+    <!-- Toast Popup -->
     <div id="toast" class="fixed bottom-6 right-6 transform translate-y-20 opacity-0 transition-all duration-300 z-50 bg-gray-900 border border-white/10 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3">
         <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
-        <span id="toastMessage" class="text-sm font-medium">Notification message</span>
+        <span id="toastMessage" class="text-sm font-medium">Notification</span>
     </div>
 
-    <!-- JavaScript Application Logic -->
+    <!-- Application Script -->
     <script>
         let currentVideoData = null;
 
-        // Toast Notification Function
         function showToast(message, iconClass = "fa-solid fa-circle-check text-emerald-400") {
             const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toastMessage');
-            const toastIcon = document.getElementById('toastIcon');
-
-            toastMsg.innerText = message;
-            toastIcon.className = iconClass + " text-lg";
+            document.getElementById('toastMessage').innerText = message;
+            document.getElementById('toastIcon').className = iconClass + " text-lg";
 
             toast.classList.remove('translate-y-20', 'opacity-0');
             toast.classList.add('translate-y-0', 'opacity-100');
@@ -354,39 +329,32 @@
             }, 3500);
         }
 
-        // Paste URL from Clipboard
         async function pasteClipboard() {
             try {
                 const text = await navigator.clipboard.readText();
                 if (text) {
                     document.getElementById('videoUrl').value = text;
-                    showToast("Link pasted from clipboard!");
+                    showToast("Pasted from clipboard!");
                 }
             } catch (err) {
-                showToast("Clipboard permission denied", "fa-solid fa-triangle-exclamation text-amber-400");
+                showToast("Clipboard permission required", "fa-solid fa-triangle-exclamation text-amber-400");
             }
         }
 
-        // Clear Input Field
         function clearInput() {
             document.getElementById('videoUrl').value = '';
             hideError();
         }
 
-        // Show Error Message
         function showError(message) {
-            const banner = document.getElementById('errorBanner');
-            const msg = document.getElementById('errorMessage');
-            msg.innerText = message;
-            banner.classList.remove('hidden');
+            document.getElementById('errorMessage').innerText = message;
+            document.getElementById('errorBanner').classList.remove('hidden');
         }
 
-        // Hide Error Message
         function hideError() {
             document.getElementById('errorBanner').classList.add('hidden');
         }
 
-        // Reset Fetcher State
         function resetFetcher() {
             document.getElementById('resultCard').classList.add('hidden');
             document.getElementById('loadingState').classList.add('hidden');
@@ -395,11 +363,11 @@
             currentVideoData = null;
         }
 
-        // Fetch Video Logic
+        // Safe JSON API Fetcher
         async function fetchVideo() {
             const urlInput = document.getElementById('videoUrl').value.trim();
             if (!urlInput) {
-                showError("Please enter a valid Facebook URL.");
+                showError("Please enter a Facebook URL.");
                 return;
             }
 
@@ -410,29 +378,35 @@
             try {
                 const response = await fetch('/api/download', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url: urlInput })
                 });
 
-                const result = await response.json();
+                const contentType = response.headers.get("content-type");
+                let result;
+
+                // Safely parse JSON response or handle non-JSON error pages
+                if (contentType && contentType.includes("application/json")) {
+                    result = await response.json();
+                } else {
+                    const rawText = await response.text();
+                    throw new Error("Server returned an invalid response. Please try again.");
+                }
 
                 if (!response.ok || !result.success) {
-                    throw new Error(result.error || "Failed to parse Facebook video URL.");
+                    throw new Error(result.error || "Failed to extract Facebook video.");
                 }
 
                 renderVideoResult(result.data);
-                showToast("Video metadata extracted successfully!");
+                showToast("Video fetched successfully!");
 
             } catch (err) {
-                showError(err.message || "An error occurred while communicating with the server.");
+                showError(err.message || "An error occurred while processing the request.");
             } finally {
                 document.getElementById('loadingState').classList.add('hidden');
             }
         }
 
-        // Render Data into Result Card
         function renderVideoResult(data) {
             currentVideoData = data;
 
@@ -454,7 +428,7 @@
 
                 row.innerHTML = `
                     <div class="flex items-center gap-3">
-                        <span class="w-9 h-9 rounded-lg flex items-center justify-center ${badgeColor} border text-sm">
+                        <span class="w-9 h-9 rounded-lg flex items-center justify-center ${badgeColor} border text-sm shrink-0">
                             <i class="${icon}"></i>
                         </span>
                         <div>
@@ -468,7 +442,7 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button onclick="copyDirectLink('${fmt.url}')" class="p-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition" title="Copy Download Link">
+                        <button onclick="copyDirectLink('${fmt.url}')" class="p-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition" title="Copy Link">
                             <i class="fa-regular fa-copy"></i>
                         </button>
                         <a href="${fmt.url}" target="_blank" download rel="noopener noreferrer" class="px-4 py-2 rounded-lg gradient-bg text-white font-semibold text-xs flex items-center gap-1.5 shadow-md hover:opacity-90 transition">
@@ -483,21 +457,18 @@
             document.getElementById('resultCard').classList.remove('hidden');
         }
 
-        // Copy Original Facebook Link
         function copyOriginalLink() {
             if (currentVideoData && currentVideoData.original_url) {
                 navigator.clipboard.writeText(currentVideoData.original_url);
-                showToast("Facebook video URL copied!");
+                showToast("Original Facebook link copied!");
             }
         }
 
-        // Copy Direct Download Stream URL
         function copyDirectLink(url) {
             navigator.clipboard.writeText(url);
-            showToast("Direct download link copied to clipboard!");
+            showToast("Direct download URL copied!");
         }
 
-        // Native Web Share API
         async function shareVideo() {
             if (navigator.share && currentVideoData) {
                 try {
@@ -505,9 +476,7 @@
                         title: currentVideoData.title,
                         url: currentVideoData.original_url
                     });
-                } catch (err) {
-                    // Ignored user cancel
-                }
+                } catch (e) {}
             } else {
                 copyOriginalLink();
             }
