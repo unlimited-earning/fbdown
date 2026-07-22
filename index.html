@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FBStreamer - Facebook Video Downloader</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 6 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        },
+                        darkbg: '#0A0D14',
+                        cardbg: 'rgba(18, 24, 38, 0.7)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0A0D14;
+            color: #F3F4F6;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-card {
+            background: rgba(17, 24, 39, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-input {
+            background: rgba(10, 13, 20, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .glass-input:focus-within {
+            border-color: #6366f1;
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #60A5FA 0%, #A78BFA 50%, #F472B6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #DB2777 100%);
+        }
+
+        /* Ambient Glow Background */
+        .glow-sphere {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+            opacity: 0.35;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0A0D14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1F2937;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #374151;
+        }
+
+        /* Pulse Animation for Loader */
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        .pulse-glow {
+            animation: pulseGlow 4s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative selection:bg-brand-500 selection:text-white">
+
+    <!-- Ambient Gradient Background Elements -->
+    <div class="glow-sphere w-[500px] h-[500px] bg-blue-600 top-[-100px] left-[-100px] pulse-glow"></div>
+    <div class="glow-sphere w-[600px] h-[600px] bg-purple-600 bottom-[-150px] right-[-150px] pulse-glow" style="animation-delay: 2s;"></div>
+
+    <!-- Navigation Header -->
+    <header class="w-full border-b border-white/5 backdrop-blur-md sticky top-0 z-50 bg-[#0A0D14]/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                    <i class="fa-brands font-bold text-white text-xl">f</i>
+                </div>
+                <span class="text-2xl font-extrabold tracking-tight text-white">FB<span class="gradient-text">Streamer</span></span>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    v2.4 Active
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col justify-center">
+
+        <!-- Hero Section -->
+        <div class="text-center mb-10">
+            <h1 class="text-4xl sm:text-6xl font-black tracking-tight mb-4 text-white leading-tight">
+                Download Facebook Videos <br class="hidden sm:inline">
+                <span class="gradient-text">In Ultra HD Quality</span>
+            </h1>
+            <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+                Fast, free, and private downloader for Facebook Reels, Videos, and Audio tracks. High speed extraction with zero ads.
+            </p>
+        </div>
+
+        <!-- Downloader Glass Card -->
+        <div class="glass-card rounded-3xl p-4 sm:p-8 transition-all duration-300">
+            <!-- Input Form Group -->
+            <form id="downloadForm" class="space-y-4" onsubmit="event.preventDefault(); fetchVideo();">
+                <div class="glass-input rounded-2xl p-2 flex flex-col sm:flex-row items-center gap-2 transition-all">
+                    
+                    <div class="flex items-center pl-4 w-full sm:w-auto text-gray-400">
+                        <i class="fa-solid fa-link text-lg"></i>
+                    </div>
+
+                    <input 
+                        type="url" 
+                        id="videoUrl" 
+                        placeholder="Paste Facebook video or reel URL here..." 
+                        required
+                        class="w-full bg-transparent border-none text-white placeholder-gray-500 text-base focus:ring-0 focus:outline-none px-2 py-3"
+                    >
+
+                    <div class="flex items-center gap-2 w-full sm:w-auto justify-end pr-1">
+                        <button 
+                            type="button" 
+                            onclick="pasteClipboard()" 
+                            class="px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-xs font-semibold flex items-center gap-2 transition"
+                            title="Paste Link"
+                        >
+                            <i class="fa-regular fa-clipboard"></i>
+                            <span>Paste</span>
+                        </button>
+
+                        <button 
+                            type="button" 
+                            onclick="clearInput()" 
+                            class="px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-xs font-semibold flex items-center gap-2 transition"
+                            title="Clear Text"
+                        >
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+
+                        <button 
+                            type="submit" 
+                            id="submitBtn"
+                            class="w-full sm:w-auto px-6 py-3.5 rounded-xl gradient-bg text-white font-bold text-sm shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02] active:scale-[0.98] transition flex items-center justify-center gap-2 min-w-[130px]"
+                        >
+                            <i class="fa-solid fa-bolt"></i>
+                            <span>Fetch Video</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Loading Spinner State -->
+            <div id="loadingState" class="hidden py-12 flex flex-col items-center justify-center space-y-4">
+                <div class="relative w-16 h-16">
+                    <div class="w-16 h-16 rounded-full border-4 border-indigo-500/20 border-t-indigo-500 animate-spin"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fa-brands fa-facebook-f text-indigo-400 text-xl"></i>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <p class="text-white font-semibold text-lg">Analyzing Video URL...</p>
+                    <p class="text-gray-400 text-sm">Parsing formats and quality options from Facebook</p>
+                </div>
+                <!-- Progress Bar Bar -->
+                <div class="w-64 h-1.5 bg-gray-800 rounded-full overflow-hidden mt-2">
+                    <div class="h-full bg-gradient-to-r from-indigo-500 to-pink-500 animate-pulse w-full"></div>
+                </div>
+            </div>
+
+            <!-- Error Notification Banner -->
+            <div id="errorBanner" class="hidden mt-6 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-300 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-circle-exclamation text-xl text-rose-400"></i>
+                    <span id="errorMessage" class="text-sm font-medium">An error occurred while fetching the video.</span>
+                </div>
+                <button onclick="hideError()" class="text-rose-400 hover:text-rose-200">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Video Preview & Downloads Result Card -->
+            <div id="resultCard" class="hidden mt-8 pt-8 border-t border-white/10 transition-all duration-500">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <!-- Thumbnail Box -->
+                    <div class="lg:col-span-5 space-y-3">
+                        <div class="relative rounded-2xl overflow-hidden border border-white/10 group bg-black/40 shadow-xl">
+                            <img id="videoThumbnail" src="" alt="Video Thumbnail" class="w-full h-56 object-cover transform group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                            <span id="videoDuration" class="absolute bottom-3 right-3 px-2.5 py-1 rounded-md bg-black/80 text-white text-xs font-mono font-bold tracking-wider backdrop-blur-md">
+                                00:00
+                            </span>
+                        </div>
+                        <h3 id="videoTitle" class="text-lg font-bold text-white line-clamp-2 leading-snug">
+                            Facebook Video Title
+                        </h3>
+                        <p id="videoUploader" class="text-xs text-gray-400 flex items-center gap-1.5">
+                            <i class="fa-regular fa-user"></i> <span>Publisher</span>
+                        </p>
+                    </div>
+
+                    <!-- Available Qualities List -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <h4 class="text-sm font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-download text-indigo-400"></i>
+                            Select Quality to Download
+                        </h4>
+
+                        <div id="qualitiesList" class="space-y-2.5 max-h-[300px] overflow-y-auto pr-1">
+                            <!-- Dynamic Format Row Cards will be injected here -->
+                        </div>
+
+                        <!-- Secondary Action Buttons -->
+                        <div class="pt-4 border-t border-white/10 flex flex-wrap gap-2">
+                            <button onclick="copyOriginalLink()" class="flex-1 min-w-[140px] px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-xs font-semibold flex items-center justify-center gap-2 transition">
+                                <i class="fa-regular fa-copy"></i>
+                                Copy Video URL
+                            </button>
+
+                            <button onclick="shareVideo()" class="flex-1 min-w-[140px] px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-xs font-semibold flex items-center justify-center gap-2 transition">
+                                <i class="fa-solid fa-share-nodes"></i>
+                                Share Video
+                            </button>
+
+                            <button onclick="resetFetcher()" class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-xs font-semibold flex items-center justify-center gap-2 transition">
+                                <i class="fa-solid fa-rotate-right"></i>
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Features / Info Badges -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+            <div class="p-5 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-sm">Ultra Fast Speed</h5>
+                    <p class="text-gray-400 text-xs mt-0.5">Instant server extraction</p>
+                </div>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 text-xl">
+                    <i class="fa-solid fa-film"></i>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-sm">Full HD Support</h5>
+                    <p class="text-gray-400 text-xs mt-0.5">1080p, 720p, 480p & Audio</p>
+                </div>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 text-xl">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-sm">100% Safe & Secure</h5>
+                    <p class="text-gray-400 text-xs mt-0.5">No login or tracking required</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full border-t border-white/5 py-8 text-center text-gray-500 text-xs mt-12">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p>© 2025 FBStreamer Downloader. All rights reserved.</p>
+            <p class="text-gray-600">This service is for educational and personal use only. We are not affiliated with Facebook or Meta.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Box -->
+    <div id="toast" class="fixed bottom-6 right-6 transform translate-y-20 opacity-0 transition-all duration-300 z-50 bg-gray-900 border border-white/10 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <span id="toastMessage" class="text-sm font-medium">Notification message</span>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        let currentVideoData = null;
+
+        // Toast Notification Function
+        function showToast(message, iconClass = "fa-solid fa-circle-check text-emerald-400") {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMsg.innerText = message;
+            toastIcon.className = iconClass + " text-lg";
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
+        }
+
+        // Paste URL from Clipboard
+        async function pasteClipboard() {
+            try {
+                const text = await navigator.clipboard.readText();
+                if (text) {
+                    document.getElementById('videoUrl').value = text;
+                    showToast("Link pasted from clipboard!");
+                }
+            } catch (err) {
+                showToast("Clipboard permission denied", "fa-solid fa-triangle-exclamation text-amber-400");
+            }
+        }
+
+        // Clear Input Field
+        function clearInput() {
+            document.getElementById('videoUrl').value = '';
+            hideError();
+        }
+
+        // Show Error Message
+        function showError(message) {
+            const banner = document.getElementById('errorBanner');
+            const msg = document.getElementById('errorMessage');
+            msg.innerText = message;
+            banner.classList.remove('hidden');
+        }
+
+        // Hide Error Message
+        function hideError() {
+            document.getElementById('errorBanner').classList.add('hidden');
+        }
+
+        // Reset Fetcher State
+        function resetFetcher() {
+            document.getElementById('resultCard').classList.add('hidden');
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('downloadForm').reset();
+            hideError();
+            currentVideoData = null;
+        }
+
+        // Fetch Video Logic
+        async function fetchVideo() {
+            const urlInput = document.getElementById('videoUrl').value.trim();
+            if (!urlInput) {
+                showError("Please enter a valid Facebook URL.");
+                return;
+            }
+
+            hideError();
+            document.getElementById('resultCard').classList.add('hidden');
+            document.getElementById('loadingState').classList.remove('hidden');
+
+            try {
+                const response = await fetch('/api/download', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url: urlInput })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(result.error || "Failed to parse Facebook video URL.");
+                }
+
+                renderVideoResult(result.data);
+                showToast("Video metadata extracted successfully!");
+
+            } catch (err) {
+                showError(err.message || "An error occurred while communicating with the server.");
+            } finally {
+                document.getElementById('loadingState').classList.add('hidden');
+            }
+        }
+
+        // Render Data into Result Card
+        function renderVideoResult(data) {
+            currentVideoData = data;
+
+            document.getElementById('videoThumbnail').src = data.thumbnail;
+            document.getElementById('videoTitle').innerText = data.title;
+            document.getElementById('videoDuration').innerText = data.duration;
+            document.getElementById('videoUploader').querySelector('span').innerText = data.uploader;
+
+            const qualitiesList = document.getElementById('qualitiesList');
+            qualitiesList.innerHTML = '';
+
+            data.formats.forEach((fmt) => {
+                const row = document.createElement('div');
+                row.className = "flex items-center justify-between p-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition";
+
+                const isAudio = fmt.is_audio;
+                const badgeColor = isAudio ? "bg-purple-500/20 text-purple-300 border-purple-500/30" : "bg-indigo-500/20 text-indigo-300 border-indigo-500/30";
+                const icon = isAudio ? "fa-solid fa-music" : "fa-solid fa-video";
+
+                row.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="w-9 h-9 rounded-lg flex items-center justify-center ${badgeColor} border text-sm">
+                            <i class="${icon}"></i>
+                        </span>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-white font-bold text-sm">${fmt.label}</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase ${badgeColor} border">
+                                    ${fmt.ext}
+                                </span>
+                            </div>
+                            <span class="text-xs text-gray-400">${fmt.filesize}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="copyDirectLink('${fmt.url}')" class="p-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition" title="Copy Download Link">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                        <a href="${fmt.url}" target="_blank" download rel="noopener noreferrer" class="px-4 py-2 rounded-lg gradient-bg text-white font-semibold text-xs flex items-center gap-1.5 shadow-md hover:opacity-90 transition">
+                            <i class="fa-solid fa-download"></i>
+                            Download
+                        </a>
+                    </div>
+                `;
+                qualitiesList.appendChild(row);
+            });
+
+            document.getElementById('resultCard').classList.remove('hidden');
+        }
+
+        // Copy Original Facebook Link
+        function copyOriginalLink() {
+            if (currentVideoData && currentVideoData.original_url) {
+                navigator.clipboard.writeText(currentVideoData.original_url);
+                showToast("Facebook video URL copied!");
+            }
+        }
+
+        // Copy Direct Download Stream URL
+        function copyDirectLink(url) {
+            navigator.clipboard.writeText(url);
+            showToast("Direct download link copied to clipboard!");
+        }
+
+        // Native Web Share API
+        async function shareVideo() {
+            if (navigator.share && currentVideoData) {
+                try {
+                    await navigator.share({
+                        title: currentVideoData.title,
+                        url: currentVideoData.original_url
+                    });
+                } catch (err) {
+                    // Ignored user cancel
+                }
+            } else {
+                copyOriginalLink();
+            }
+        }
+    </script>
+</body>
+</html>
