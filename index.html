@@ -93,11 +93,11 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between relative selection:bg-indigo-500 selection:text-white">
 
-    <!-- Ambient Glow BG -->
+    <!-- Ambient Gradient Sphere BG -->
     <div class="glow-sphere w-[500px] h-[500px] bg-blue-600 top-[-100px] left-[-100px] pulse-glow"></div>
     <div class="glow-sphere w-[600px] h-[600px] bg-purple-600 bottom-[-150px] right-[-150px] pulse-glow" style="animation-delay: 2s;"></div>
 
-    <!-- Top Header Navigation -->
+    <!-- Navigation Bar -->
     <header class="w-full border-b border-white/5 backdrop-blur-md sticky top-0 z-40 bg-[#0A0D14]/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -115,10 +115,10 @@
         </div>
     </header>
 
-    <!-- Main Content Area -->
+    <!-- Main Container -->
     <main class="flex-grow max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col justify-center">
 
-        <!-- Hero Banner -->
+        <!-- Hero Title Section -->
         <div class="text-center mb-10">
             <h1 class="text-4xl sm:text-6xl font-black tracking-tight mb-4 text-white leading-tight">
                 Download Facebook Videos <br class="hidden sm:inline">
@@ -129,9 +129,8 @@
             </p>
         </div>
 
-        <!-- Glass Card Box -->
+        <!-- Downloader Input Box Card -->
         <div class="glass-card rounded-3xl p-4 sm:p-8 transition-all duration-300 relative z-10">
-            <!-- Form Input -->
             <form id="downloadForm" class="space-y-4" onsubmit="event.preventDefault(); fetchVideo();">
                 <div class="glass-input rounded-2xl p-2 flex flex-col sm:flex-row items-center gap-2 transition-all">
                     
@@ -179,7 +178,7 @@
                 </div>
             </form>
 
-            <!-- Loading Spinner State -->
+            <!-- Loading Spinner & Progress Animation -->
             <div id="loadingState" class="hidden py-12 flex flex-col items-center justify-center space-y-4">
                 <div class="relative w-16 h-16">
                     <div class="w-16 h-16 rounded-full border-4 border-indigo-500/20 border-t-indigo-500 animate-spin"></div>
@@ -189,7 +188,7 @@
                 </div>
                 <div class="text-center">
                     <p class="text-white font-semibold text-lg">Analyzing Video URL...</p>
-                    <p class="text-gray-400 text-sm">Resolving redirects and fetching qualities</p>
+                    <p class="text-gray-400 text-sm">Resolving redirects and parsing formats</p>
                 </div>
                 <div class="w-64 h-1.5 bg-gray-800 rounded-full overflow-hidden mt-2">
                     <div class="h-full bg-gradient-to-r from-indigo-500 to-pink-500 animate-pulse w-full"></div>
@@ -202,16 +201,22 @@
                     <i class="fa-solid fa-circle-exclamation text-xl text-rose-400 shrink-0"></i>
                     <span id="errorMessage" class="text-sm font-medium leading-normal">An error occurred while fetching the video.</span>
                 </div>
-                <button onclick="hideError()" class="text-rose-400 hover:text-rose-200 pl-2">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <div class="flex items-center gap-2">
+                    <button onclick="fetchVideo()" class="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        Retry
+                    </button>
+                    <button onclick="hideError()" class="text-rose-400 hover:text-rose-200 p-1">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
             </div>
 
-            <!-- Result Card -->
+            <!-- Result Box -->
             <div id="resultCard" class="hidden mt-8 pt-8 border-t border-white/10 transition-all duration-500">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                     
-                    <!-- Thumbnail Column -->
+                    <!-- Video Thumbnail Box -->
                     <div class="lg:col-span-5 space-y-3">
                         <div class="relative rounded-2xl overflow-hidden border border-white/10 group bg-black/40 shadow-xl">
                             <img id="videoThumbnail" src="" alt="Thumbnail" class="w-full h-56 object-cover transform group-hover:scale-105 transition duration-500">
@@ -228,27 +233,27 @@
                         </p>
                     </div>
 
-                    <!-- Downloads Column -->
+                    <!-- Video Qualities List -->
                     <div class="lg:col-span-7 space-y-4">
                         <h4 class="text-sm font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
                             <i class="fa-solid fa-download text-indigo-400"></i>
-                            Select Download Format
+                            Select Available Qualities
                         </h4>
 
                         <div id="qualitiesList" class="space-y-2.5 max-h-[300px] overflow-y-auto pr-1">
-                            <!-- Dynamic rows injected here -->
+                            <!-- Injected dynamically -->
                         </div>
 
                         <!-- Action Buttons -->
                         <div class="pt-4 border-t border-white/10 flex flex-wrap gap-2">
                             <button onclick="copyOriginalLink()" class="flex-1 min-w-[140px] px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-xs font-semibold flex items-center justify-center gap-2 transition">
                                 <i class="fa-regular fa-copy"></i>
-                                Copy Link
+                                Copy Original Link
                             </button>
 
                             <button onclick="shareVideo()" class="flex-1 min-w-[140px] px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-xs font-semibold flex items-center justify-center gap-2 transition">
                                 <i class="fa-solid fa-share-nodes"></i>
-                                Share
+                                Share Video
                             </button>
 
                             <button onclick="resetFetcher()" class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 text-xs font-semibold flex items-center justify-center gap-2 transition">
@@ -262,15 +267,15 @@
 
         </div>
 
-        <!-- Feature Highlights -->
+        <!-- Info Badges -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
             <div class="p-5 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center gap-4">
                 <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl">
                     <i class="fa-solid fa-bolt"></i>
                 </div>
                 <div>
-                    <h5 class="text-white font-bold text-sm">Ultra Fast</h5>
-                    <p class="text-gray-400 text-xs mt-0.5">Instant link extraction</p>
+                    <h5 class="text-white font-bold text-sm">Ultra Fast Speed</h5>
+                    <p class="text-gray-400 text-xs mt-0.5">Instant server extraction</p>
                 </div>
             </div>
 
@@ -279,8 +284,8 @@
                     <i class="fa-solid fa-film"></i>
                 </div>
                 <div>
-                    <h5 class="text-white font-bold text-sm">All Qualities</h5>
-                    <p class="text-gray-400 text-xs mt-0.5">1080p, 720p, 480p & MP3</p>
+                    <h5 class="text-white font-bold text-sm">HD & MP3 Quality</h5>
+                    <p class="text-gray-400 text-xs mt-0.5">1080p, 720p, 480p & Audio</p>
                 </div>
             </div>
 
@@ -289,8 +294,8 @@
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
                 <div>
-                    <h5 class="text-white font-bold text-sm">100% Private</h5>
-                    <p class="text-gray-400 text-xs mt-0.5">No login or personal data stored</p>
+                    <h5 class="text-white font-bold text-sm">100% Secure</h5>
+                    <p class="text-gray-400 text-xs mt-0.5">No login or tracking required</p>
                 </div>
             </div>
         </div>
@@ -305,13 +310,13 @@
         </div>
     </footer>
 
-    <!-- Toast Popup -->
+    <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-6 right-6 transform translate-y-20 opacity-0 transition-all duration-300 z-50 bg-gray-900 border border-white/10 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3">
         <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
         <span id="toastMessage" class="text-sm font-medium">Notification</span>
     </div>
 
-    <!-- Application Script -->
+    <!-- Frontend Application Logic -->
     <script>
         let currentVideoData = null;
 
@@ -334,7 +339,7 @@
                 const text = await navigator.clipboard.readText();
                 if (text) {
                     document.getElementById('videoUrl').value = text;
-                    showToast("Pasted from clipboard!");
+                    showToast("Pasted link from clipboard!");
                 }
             } catch (err) {
                 showToast("Clipboard permission required", "fa-solid fa-triangle-exclamation text-amber-400");
@@ -363,11 +368,11 @@
             currentVideoData = null;
         }
 
-        // Safe JSON API Fetcher
+        // Safe API Fetcher guarantees zero JSON.parse crashes
         async function fetchVideo() {
             const urlInput = document.getElementById('videoUrl').value.trim();
             if (!urlInput) {
-                showError("Please enter a Facebook URL.");
+                showError("Please enter a valid Facebook URL.");
                 return;
             }
 
@@ -378,30 +383,33 @@
             try {
                 const response = await fetch('/api/download', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
                     body: JSON.stringify({ url: urlInput })
                 });
 
                 const contentType = response.headers.get("content-type");
-                let result;
+                let result = null;
 
-                // Safely parse JSON response or handle non-JSON error pages
+                // Validate content-type before parsing JSON to prevent syntax exceptions
                 if (contentType && contentType.includes("application/json")) {
                     result = await response.json();
                 } else {
                     const rawText = await response.text();
-                    throw new Error("Server returned an invalid response. Please try again.");
+                    throw new Error("Server returned a non-JSON response. Please try again.");
                 }
 
-                if (!response.ok || !result.success) {
-                    throw new Error(result.error || "Failed to extract Facebook video.");
+                if (!response.ok || !result || result.success === false) {
+                    throw new Error((result && result.message) ? result.message : "Failed to extract Facebook video details.");
                 }
 
-                renderVideoResult(result.data);
-                showToast("Video fetched successfully!");
+                renderVideoResult(result);
+                showToast("Video metadata extracted successfully!");
 
             } catch (err) {
-                showError(err.message || "An error occurred while processing the request.");
+                showError(err.message || "An unexpected network error occurred.");
             } finally {
                 document.getElementById('loadingState').classList.add('hidden');
             }
@@ -442,7 +450,7 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button onclick="copyDirectLink('${fmt.url}')" class="p-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition" title="Copy Link">
+                        <button onclick="copyDirectLink('${fmt.url}')" class="p-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition" title="Copy Download Link">
                             <i class="fa-regular fa-copy"></i>
                         </button>
                         <a href="${fmt.url}" target="_blank" download rel="noopener noreferrer" class="px-4 py-2 rounded-lg gradient-bg text-white font-semibold text-xs flex items-center gap-1.5 shadow-md hover:opacity-90 transition">
@@ -460,7 +468,7 @@
         function copyOriginalLink() {
             if (currentVideoData && currentVideoData.original_url) {
                 navigator.clipboard.writeText(currentVideoData.original_url);
-                showToast("Original Facebook link copied!");
+                showToast("Original video link copied!");
             }
         }
 
